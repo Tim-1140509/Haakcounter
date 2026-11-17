@@ -94,6 +94,7 @@ string RenderPage()
     <!DOCTYPE html>
     <html>
     <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Haak Counter</title>
         <link rel='stylesheet' href='/style.css'>
     </head>
@@ -286,6 +287,7 @@ app.MapGet("/toevoegen", () =>
     <!DOCTYPE html>
     <html>
     <head>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
         <title>Nieuw project</title>
         <link rel='stylesheet' href='/style.css'>
     </head>

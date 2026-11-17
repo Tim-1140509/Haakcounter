@@ -344,3 +344,180 @@ button {
     gap: 10px;
     flex-shrink: 0;
 }
+
+/* =================================
+   MOBIELVRIENDELIJK DESIGN
+   ================================= */
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    padding: 15px;
+}
+
+/* Voorkom dat de inhoud te breed wordt */
+.container {
+    width: 100%;
+    max-width: 450px;
+}
+
+/* Tellerkaart */
+.counter-card {
+    padding: 30px 20px;
+}
+
+/* De teller past zich aan het scherm aan */
+.counter-card h2 {
+    font-size: clamp(55px, 18vw, 90px);
+}
+
+/* Plus- en minknoppen */
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.plus,
+.minus {
+    width: min(38vw, 150px);
+    height: min(38vw, 150px);
+    min-width: 100px;
+    min-height: 100px;
+    font-size: 30px;
+}
+
+/* Projectinformatie */
+.info-card {
+    padding: 20px;
+    overflow-wrap: break-word;
+}
+
+/* Projectregels */
+.project-item {
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.project-info {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+
+.project-actions {
+    gap: 8px;
+}
+
+/* Formulieren */
+.toevoeg-input,
+.toevoeg-button {
+    width: 100%;
+    min-height: 48px;
+}
+
+/* Knoppen makkelijker aantikken */
+.reset,
+.Iets-toevoegen,
+.delete-button {
+    min-height: 44px;
+}
+
+/* Kleinere telefoons */
+@media (max-width: 480px) {
+    body {
+        padding: 12px;
+        align-items: flex-start;
+    }
+
+    .container {
+        max-width: 100%;
+        margin: 15px auto;
+    }
+
+    h1 {
+        font-size: 27px;
+    }
+
+    .subtitle {
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .counter-card {
+        padding: 25px 15px;
+        border-radius: 20px;
+    }
+
+    .counter-label {
+        font-size: 16px;
+    }
+
+    .counter-card h2 {
+        margin: 10px 0 20px;
+    }
+
+    .buttons {
+        gap: 12px;
+    }
+
+    .plus,
+    .minus {
+        width: 38vw;
+        height: 38vw;
+        max-width: 135px;
+        max-height: 135px;
+        min-width: 90px;
+        min-height: 90px;
+        font-size: 28px;
+    }
+
+    .info-card {
+        padding: 18px;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    .project-item {
+        padding: 12px 0;
+    }
+
+    .project-actions {
+        gap: 6px;
+    }
+
+    .delete-button {
+        padding: 8px 10px;
+        font-size: 14px;
+    }
+
+    .reset,
+    .Iets-toevoegen {
+        width: 100%;
+        padding: 13px 15px;
+        font-size: 16px;
+    }
+
+    .celebration-message {
+        margin: 15px;
+        padding: 20px;
+        font-size: 21px;
+        text-align: center;
+    }
+}
+
+/* Extra kleine telefoons */
+@media (max-width: 350px) {
+    .plus,
+    .minus {
+        width: 36vw;
+        height: 36vw;
+        min-width: 80px;
+        min-height: 80px;
+    }
+
+    .project-item {
+        align-items: flex-start;
+    }
+}
