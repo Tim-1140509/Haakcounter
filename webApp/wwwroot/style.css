@@ -1,0 +1,346 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #d651b7;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    color: #5b007a;
+}
+
+.container {
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+}
+
+h1 {
+    font-size: 32px;
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.subtitle {
+    color: #fadef4;
+    margin-bottom: 30px;
+}
+
+.counter-card {
+    background: #ffffff;
+    padding: 40px 25px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(60, 75, 55, 0.08);
+}
+
+.counter-label {
+    font-size: 18px;
+    color: #ff81e0;
+}
+
+.counter-card h2 {
+    font-size: 90px;
+    color: #b409bd;
+    margin: 15px 0 25px;
+}
+
+.buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+}
+
+button {
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    border-radius: 15px;
+    transition: 0.2s;
+}
+
+.plus{
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    background: green;
+    color: white;
+}
+.minus{
+    width: 200px;
+    height: 200px;
+    border-radius: 100%;
+    background: rgb(153, 24, 24);
+    color: white;
+}
+
+.plus:hover, .minus:hover {
+    background: #c4d8bf;
+    transform: scale(1.05);
+}
+
+.info-card {
+    background: #e8eee3;
+    padding: 25px;
+    margin-top: 20px;
+    border-radius: 20px;
+    text-align: left;
+    line-height: 2;
+}
+
+.info-card h3 {
+    margin-bottom: 10px;
+    color: #cd7bc6;
+}
+
+.reset {
+    background: #65096e;
+    color: white;
+    padding: 14px 30px;
+    margin-top: 25px;
+    font-size: 16px;
+}
+.Iets-toevoegen{
+    background: #cd7bc6;
+    color:#5b007a;
+    padding: 14px 30px;
+    margin-top: 25px;
+    font-size: 16px;
+    border-radius: 16px;
+    text-decoration: none;
+}
+.Iets-toevoegen:hover{
+    background: #d74ecc;
+    
+}
+
+.reset:hover {
+    background: #d237ca;
+    color: white;
+}
+
+.toevoeg-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.toevoeg-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #e8b5df;
+    border-radius: 12px;
+    background: white;
+    color: #5b007a;
+    font-size: 16px;
+}
+
+.toevoeg-button {
+    padding: 15px;
+    border-radius: 12px;
+    background: #5b007a;
+    color: white;
+    font-size: 18px;
+}
+
+.toevoeg-button:hover {
+    background: #8c20a0;
+}
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #e8b5df;
+}
+
+.project-switch {
+    width: 55px;
+    height: 30px;
+    border-radius: 30px;
+    background: #aaa;
+    padding: 3px;
+    transition: 0.2s;
+}
+
+.project-switch span {
+    display: block;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: white;
+    transition: 0.2s;
+}
+
+.project-switch.active {
+    background: #5b007a;
+}
+
+.project-switch.active span {
+    transform: translateX(25px);
+}
+.project-klaar {
+    display: inline-block;
+    color: #16853b;
+    font-weight: bold;
+    font-size: 20px;
+    animation: glitter 1s infinite alternate;
+}
+
+@keyframes glitter {
+    from {
+        transform: scale(1);
+        text-shadow: 0 0 2px gold;
+    }
+
+    to {
+        transform: scale(1.2);
+        text-shadow: 0 0 12px gold;
+    }
+}
+/* Projecten netjes uitlijnen */
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.project-info {
+    flex: 1;
+    text-align: left;
+}
+
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.project-switch {
+    width: 48px;
+    height: 26px;
+    border: none;
+    border-radius: 20px;
+    background: #ccc;
+    cursor: pointer;
+    position: relative;
+}
+
+.project-switch span {
+    display: block;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    transition: transform 0.2s;
+}
+
+.project-switch.active {
+    background: #78bd91;
+}
+
+.project-switch.active span {
+    transform: translateX(22px);
+}
+
+/* Verwijderknop */
+.delete-button {
+    background: #e8a0a0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.delete-button:hover {
+    background: #d66f6f;
+}
+
+/* Vinkje bij afgerond project */
+.project-klaar {
+    color: #16853b;
+    font-size: 22px;
+    margin-left: 8px;
+}
+
+/* Feestelijke melding over het hele scherm */
+.celebration {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.35);
+    animation: celebrationFade 3s forwards;
+}
+
+.celebration-message {
+    background: white;
+    padding: 25px 35px;
+    border-radius: 20px;
+    font-size: 26px;
+    font-weight: bold;
+    color: #16853b;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+    animation: popIn 0.6s ease-out;
+}
+
+.sparkles {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    font-size: 35px;
+    animation: sparkle 1s infinite alternate;
+}
+
+#confetti-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 99999;
+}
+.project-actions form {
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+.project-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+}
+
+.project-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.project-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0;
+}
