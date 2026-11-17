@@ -89,7 +89,7 @@ string RenderPage()
         }, 5000);
     </script>"
     : "";
-
+    
     string html = $@"
     <!DOCTYPE html>
     <html>
@@ -109,7 +109,7 @@ string RenderPage()
                 <div class='counter-card'>
                     <p class='counter-label'>{projectNaam}</p>
                     <h2 id='counter'>{huidigeTelling}</h2>
-                    <p>{status}</p>
+                    <p id='counter-status'>{status}</p>
                     <br>
 
                     <div class='buttons'>
@@ -160,6 +160,37 @@ string RenderPage()
             
 
         </div>
+
+<script>
+    document.querySelectorAll('.buttons form').forEach(form => {{
+        form.addEventListener('submit', async function(event) {{
+            event.preventDefault();
+
+            const button = form.querySelector('button');
+            button.disabled = true;
+
+            try {{
+                const response = await fetch(form.action, {{
+                    method: 'POST'
+                }});
+
+                if (!response.ok) {{
+                    throw new Error('Tellen is mislukt');
+                }}
+
+                const data = await response.json();
+
+                document.getElementById('counter').textContent = data.count;
+                document.getElementById('counter-status').textContent = data.status;
+            }} catch (error) {{
+                console.error(error);
+            }} finally {{
+                button.disabled = false;
+            }}
+        }});
+    }});
+</script>
+
         {confettiScript}
     </body>
     </html>";
@@ -207,23 +238,17 @@ app.MapPost("/activeren/{id:guid}", (Guid id) =>
 
     if (gekozenProject != null)
     {
-        bool wasAlActief = gekozenProject.Actief;
-
         foreach (var project in projecten)
         {
             project.Actief = false;
         }
 
         gekozenProject.Actief = true;
-
-        if (!wasAlActief)
-        {
-            gekozenProject.HuidigeTelling = 0;
-        }
     }
 
     return Results.Redirect("/");
 }).DisableAntiforgery();
+
 
 app.MapPost("/minus", () =>
 {
@@ -235,8 +260,18 @@ app.MapPost("/minus", () =>
         actiefProject.HuidigeTelling--;
     }
 
-    return Results.Redirect("/");
+    int telling = actiefProject?.HuidigeTelling ?? 0;
+
+    string status = actiefProject == null
+        ? "Kies een project om te beginnen"
+        : actiefProject.Afgerond
+            ? "Project afgerond!"
+            : $"Nog {actiefProject.Doelsteken - telling} steken te gaan";
+
+    return Results.Json(new { count = telling, status });
 }).DisableAntiforgery();
+
+
 
 app.MapPost("/plus", () =>
 {
@@ -248,8 +283,17 @@ app.MapPost("/plus", () =>
         actiefProject.HuidigeTelling++;
     }
 
-    return Results.Redirect("/");
+    int telling = actiefProject?.HuidigeTelling ?? 0;
+
+    string status = actiefProject == null
+        ? "Kies een project om te beginnen"
+        : actiefProject.Afgerond
+            ? "Project afgerond!"
+            : $"Nog {actiefProject.Doelsteken - telling} steken te gaan";
+
+    return Results.Json(new { count = telling, status });
 }).DisableAntiforgery();
+
 
 app.MapPost("/reset", () =>
 {
