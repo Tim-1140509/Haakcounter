@@ -25,70 +25,6 @@ string RenderPage()
         : actiefProject.Afgerond
             ?"Project afgerond!"
             : $"Nog {doelSteken - huidigeTelling} steken te gaan";
-    string confettiScript = actiefProject?.Afgerond == true
-    ? @"
-    <script>
-        const canvas = document.createElement('canvas');
-        canvas.id = 'confetti-canvas';
-        document.body.appendChild(canvas);
-
-        const ctx = canvas.getContext('2d');
-
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        const colors = [
-            '#55476a',
-            '#ae3d63',
-            '#db3853',
-            '#f45c44',
-            '#f8b646'
-        ];
-
-        const particles = [];
-
-        for (let i = 0; i < 250; i++) {
-            particles.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * -canvas.height,
-                size: Math.random() * 6 + 2,
-                speed: Math.random() * 4 + 2,
-                color: colors[Math.floor(Math.random() * colors.length)],
-                rotation: Math.random() * 360
-            });
-        }
-
-        function animateConfetti() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            particles.forEach(p => {
-                ctx.fillStyle = p.color;
-
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rotation * Math.PI / 180);
-                ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
-                ctx.restore();
-
-                p.y += p.speed;
-                p.rotation += 3;
-
-                if (p.y > canvas.height) {
-                    p.y = -10;
-                    p.x = Math.random() * canvas.width;
-                }
-            });
-
-            requestAnimationFrame(animateConfetti);
-        }
-
-        animateConfetti();
-
-        setTimeout(() => {
-            canvas.remove();
-        }, 5000);
-    </script>"
-    : "";
     
     string html = $@"
     <!DOCTYPE html>
@@ -131,8 +67,10 @@ string RenderPage()
                             <div class='project-info'>
                                 <strong>{System.Net.WebUtility.HtmlEncode(p.Naam)}</strong>
                                 <br>
-                                {p.HuidigeTelling} / {p.Doelsteken} steken
-                                {(p.Afgerond ? "<span class='project-klaar'>Klaar!</span>" : "")}
+                                <span id='project-count-{p.Id}' data-target='{p.Doelsteken}'>{p.HuidigeTelling}</span>
+                                <span id='project-status-{p.Id}'>
+                                    {(p.Afgerond ? "<span class='project-klaar'>Klaar!</span>" : "")}
+                                </span>
                             </div>
 
                             <div class='project-actions'>
@@ -162,6 +100,72 @@ string RenderPage()
         </div>
 
 <script>
+
+function startConfetti() {{
+    const canvas = document.createElement('canvas');
+    canvas.id = 'confetti-canvas';
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    canvas.style.zIndex = '9999';
+
+    document.body.appendChild(canvas);
+
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#55476a', '#ae3d63', '#db3853', '#f45c44', '#f8b646'];
+    const particles = [];
+
+    for (let i = 0; i < 250; i++) {{
+        particles.push({{
+            x: Math.random() * canvas.width,
+            y: Math.random() * -canvas.height,
+            size: Math.random() * 6 + 2,
+            speed: Math.random() * 4 + 2,
+            color: colors[Math.floor(Math.random() * colors.length)],
+            rotation: Math.random() * 360
+        }});
+    }}
+
+    let animationId;
+
+    function animateConfetti() {{
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        particles.forEach(p => {{
+            ctx.fillStyle = p.color;
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate(p.rotation * Math.PI / 180);
+            ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            ctx.restore();
+
+            p.y += p.speed;
+            p.rotation += 3;
+
+            if (p.y > canvas.height) {{
+                p.y = -10;
+                p.x = Math.random() * canvas.width;
+            }}
+        }});
+
+        animationId = requestAnimationFrame(animateConfetti);
+    }}
+
+    animateConfetti();
+
+    setTimeout(() => {{
+        cancelAnimationFrame(animationId);
+        canvas.remove();
+    }}, 5000);
+}}
+
     document.querySelectorAll('.buttons form').forEach(form => {{
         form.addEventListener('submit', async function(event) {{
             event.preventDefault();
@@ -182,6 +186,30 @@ string RenderPage()
 
                 document.getElementById('counter').textContent = data.count;
                 document.getElementById('counter-status').textContent = data.status;
+
+                if (data.projectId) {{
+                    const projectCount = document.getElementById(
+                        'project-count-' + data.projectId
+                    );
+                    const projectStatus = document.getElementById(
+                        'project-status-' + data.projectId
+                    );
+
+                    if (projectCount) {{
+                        projectCount.textContent = data.count;
+
+                        const doel = Number(projectCount.dataset.target);
+                        if (projectStatus) {{
+                            projectStatus.innerHTML = data.count >= doel
+                                ? `<span class='project-klaar'>Klaar!</span>`
+                                : ``;
+                        }}
+                    }}
+                }}
+
+                if (data.confetti) {{
+                    startConfetti();
+                }}
             }} catch (error) {{
                 console.error(error);
             }} finally {{
@@ -191,7 +219,7 @@ string RenderPage()
     }});
 </script>
 
-        {confettiScript}
+    
     </body>
     </html>";
 
@@ -268,7 +296,13 @@ app.MapPost("/minus", () =>
             ? "Project afgerond!"
             : $"Nog {actiefProject.Doelsteken - telling} steken te gaan";
 
-    return Results.Json(new { count = telling, status });
+    return Results.Json(new 
+    { 
+        count = telling,
+        status = status,
+        projectId = actiefProject?.Id,
+        confetti = false
+        });
 }).DisableAntiforgery();
 
 
@@ -277,10 +311,17 @@ app.MapPost("/plus", () =>
 {
     var actiefProject = projecten.FirstOrDefault(p => p.Actief);
 
+    bool confetti = false;
+
     if (actiefProject != null &&
         actiefProject.HuidigeTelling < actiefProject.Doelsteken)
     {
         actiefProject.HuidigeTelling++;
+
+        if (actiefProject.Afgerond)
+        {
+            confetti = true;
+        }
     }
 
     int telling = actiefProject?.HuidigeTelling ?? 0;
@@ -291,7 +332,13 @@ app.MapPost("/plus", () =>
             ? "Project afgerond!"
             : $"Nog {actiefProject.Doelsteken - telling} steken te gaan";
 
-    return Results.Json(new { count = telling, status });
+    return Results.Json(new
+    {
+        count = telling,
+        status = status,
+        confetti = confetti,
+        projectId = actiefProject?.Id
+    });
 }).DisableAntiforgery();
 
 
